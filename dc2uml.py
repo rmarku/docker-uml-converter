@@ -96,12 +96,12 @@ def extract_service_networks(data_dict):
         networks = finditem(data_dict, 'networks').keys()
         if len(networks) > 1:
             for i in networks:
-                if ret.has_key(i):
+                if i in ret:
                     ret[i].append(k)
                 else:
                     ret.update({i: [k]})
         else:
-            if ret.has_key(networks[0]):
+            if networks[0] in ret:
                 ret[networks[0]].append(k)
             else:
                 ret.update({networks[0]: [k]})
@@ -183,11 +183,11 @@ def combine_uml(networks_uml, depends_on_uml, image_uml):
 
 
 def combine_puml_with_atom_md(raw_uml):
-    prefix = '```puml\n'
+    prefix = '```plantuml\n'
     sufix = '```'
     return prefix + raw_uml + sufix
 
-
+3
 # output_uml
 
 def save_md(uml, output_filename):
