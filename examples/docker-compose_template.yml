@@ -8,9 +8,7 @@ services:
       - "7080:80"
     restart: always
     networks:
-      mynetwork:
-        aliases:
-          - gitlab.com
+      - mynetwork
   swagger-ui:
     image: schickling/swagger-ui
     ports:
@@ -35,9 +33,7 @@ services:
       - "5900:5900"
     restart: always
     networks:
-      mynetwork:
-        aliases:
-          - ubuntu-desktop.com
+      - mynetwork
     depends_on:
       - gitlab-chprot
       - swagger-ui

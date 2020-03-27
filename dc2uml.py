@@ -15,7 +15,7 @@ def finditem(obj, key):
 def open_yml(filename):
     import yaml
     with open(filename, 'r') as f:
-        dict = yaml.load(f)
+        dict = yaml.safe_load(f)
     return dict
 
 
@@ -93,7 +93,7 @@ def convert_service_image_to_uml(data_dict):
 def extract_service_networks(data_dict):
     ret = {}
     for (k, v) in data_dict.items():
-        networks = finditem(data_dict, 'networks').keys()
+        networks = finditem(data_dict, 'networks')
         if len(networks) > 1:
             for i in networks:
                 if i in ret:
@@ -127,7 +127,7 @@ def convert_service_services_to_uml(data_dict):
   ---
 '''
         tmp = add_ports(tmp, v)
-        tmp = add_aliases(tmp, v)
+        #tmp = add_aliases(tmp, v)
         tmp = tmp + sufix
         ret.update({k: tmp})
     return ret
@@ -137,9 +137,13 @@ def add_ports(uml, data_dict):
     ports_define = 'ports'
     ports = finditem(data_dict, ports_define)
     poarts_str = ''
-    for i in ports:
-        poarts_str = poarts_str + str(i) + ','
-    added_str = uml + '  ' + ports_define + ':' + poarts_str + '\n'
+    try:
+        for i in ports:
+            poarts_str = poarts_str + str(i) + ','
+            added_str = uml + '  ' + ports_define + ':' + poarts_str + '\n'
+    except:
+        return uml
+
     return added_str
 
 
@@ -187,7 +191,7 @@ def combine_puml_with_atom_md(raw_uml):
     sufix = '```'
     return prefix + raw_uml + sufix
 
-3
+
 # output_uml
 
 def save_md(uml, output_filename):
@@ -224,10 +228,10 @@ def main():
     # process image
     # ----
 
-    image_data_dict = \
-        extract_service_image(data_dict_preprocessed['services'])
-    image_uml = convert_service_image_to_uml(image_data_dict)
-
+    # image_data_dict = \
+    #     extract_service_image(data_dict_preprocessed['services'])
+    # image_uml = convert_service_image_to_uml(image_data_dict)
+    image_uml = ''
     # ----
     # process networks
     # ----
